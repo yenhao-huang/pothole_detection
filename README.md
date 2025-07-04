@@ -1,4 +1,4 @@
-# YOLOv8 Pothole Detection
+# Pothole Detection
 
 This project uses **Ultralytics YOLOv8** for pothole detection in images. It can be applied to road inspection, intelligent transportation systems, and related fields.
 
