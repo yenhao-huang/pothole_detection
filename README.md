@@ -47,6 +47,18 @@ python script/evaluate.py
 | Head             | Anchor-free, decoupled classification and regression |
 | Architecture     | CSP bottlenecks, simplified head, no Focus layer     |
 
+### Loss Function
+| Component    | Description                                                                                                                                   |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Box Loss** | SIoU loss (Scalable IoU loss), measures the IoU |
+| **Cls Loss** | Binary Cross-Entropy (BCE) loss, used for multi-class classification in a one-vs-all manner                                                   |
+
+| Component    | Description                                                                                                                                                           |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **DFL Loss** | Distribution Focal Loss —  helps the model focus more on learning from positive samples|
+| **Cls Loss** | Binary Cross-Entropy (BCE) loss — evaluates class prediction accuracy                              |
+| **IoU Loss** | IoU-based loss (e.g., CIoU or SIoU) — measures overlap quality between predicted and ground-truth boxes |
+
 
 ---
 
