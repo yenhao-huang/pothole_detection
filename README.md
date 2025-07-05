@@ -48,11 +48,7 @@ python script/evaluate.py
 | Architecture     | CSP bottlenecks, simplified head, no Focus layer     |
 
 ### Loss Function
-| Component    | Description                                                                                                                                   |
-| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Box Loss** | SIoU loss (Scalable IoU loss), measures the IoU |
-| **Cls Loss** | Binary Cross-Entropy (BCE) loss, used for multi-class classification in a one-vs-all manner                                                   |
-
+                                                            
 | Component    | Description                                                                                                                                                           |
 | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **DFL Loss** | Distribution Focal Loss —  helps the model focus more on learning from positive samples|
