@@ -2,6 +2,10 @@
 
 This project uses **Ultralytics YOLOv8** for pothole detection in images. It can be applied to road inspection, intelligent transportation systems, and related fields.
 
+TODO
+- [ ] yolov8 v.s. yolov11
+- [ ] challenges
+
 ---
 
 ## How to Run
@@ -11,10 +15,10 @@ This project uses **Ultralytics YOLOv8** for pothole detection in images. It can
 pip install -r requirements.txt
 ```
 
-### 2. repare data
+### 2. Prepare data
 Convert the dataset to COCO format and split into train / val:
 ```bash
-python split_raw_data.py
+python utils/split_raw_data.py
 ```
 
 ### 3. Train the model
@@ -39,13 +43,14 @@ python script/evaluate.py
 
 ## Model Overview
 
-| Attribute        | Value                                                |
-| ---------------- | ---------------------------------------------------- |
-| Parameters       | \~3.2 M                                        |
-| Layers           | 33                                                   |
-| Width multiplier | 0.25                                                 |
-| Head             | Anchor-free, decoupled classification and regression |
-| Architecture     | CSP bottlenecks, simplified head, no Focus layer     |
+| Item              | Value                             |
+| ----------------- | --------------------------------- |
+| **#Parameters**   | \~3.2M                |
+| **Optimizer**     | SGD      |
+| **Learning Rate** | 0.01 |
+| **Loss Function** | CIoU Loss + CLs Loss + DFL Loss        |
+| **Batch Size**    | 16  |
+| **Epochs**        | 100      |
 
 ### Loss Function
                                                             
@@ -53,7 +58,7 @@ python script/evaluate.py
 | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **DFL Loss** | Distribution Focal Loss —  helps the model focus more on learning from positive samples|
 | **Cls Loss** | Binary Cross-Entropy (BCE) loss — evaluates class prediction accuracy                              |
-| **IoU Loss** | IoU-based loss (e.g., CIoU or SIoU) — measures overlap quality between predicted and ground-truth boxes |
+| **CIoU Loss** | IoU-based loss (e.g., CIoU or SIoU) — measures overlap quality between predicted and ground-truth boxes |
 
 
 ---
