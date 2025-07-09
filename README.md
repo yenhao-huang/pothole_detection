@@ -3,9 +3,9 @@
 This project uses **Ultralytics YOLOv8** for pothole detection in images. It can be applied to road inspection, intelligent transportation systems, and related fields.
 
 TODO
-- [ ] yolov8 v.s. yolov11
-- [ ] challenges
-
+- [ ] Change Models: yolov8 v.s. yolov11
+- [ ] Change Optimizer ADAM
+- [ ] Summary Challenges
 ---
 
 ## How to Run
@@ -66,12 +66,12 @@ python script/evaluate.py
 ## Results
 
 ### Performance
-| Metric                 | Value   |
-| ---------------------- | ------- |
-| Precision (B)          | 0.85399 |
-| Recall (B)             | 0.70845 |
-| mAP50 (B)              | 0.81022 |
-| mAP50-95 (B)           | 0.55191 |
+| Metric        | YOLOv8  | YOLOv11 |
+| ------------- | ------- | ------- |
+| Precision (B) | 0.85399 | 0.81587 |
+| Recall (B)    | 0.70845 | 0.73650 |
+| mAP50 (B)     | 0.81022 | 0.82713 |
+| mAP50-95 (B)  | 0.55191 | 0.55596 |
 
 ### Speed (ms per image)
 | Stage       | Time (ms) |
@@ -80,6 +80,8 @@ python script/evaluate.py
 | Inference   | 5.19      |
 | Loss        | 0.00026   |
 | Postprocess | 0.79      |
+
+## Challenges
 
 ---
 

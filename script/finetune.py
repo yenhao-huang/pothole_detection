@@ -10,7 +10,7 @@ def main():
     args = parser.parse_args()
 
     # Load model
-    model = YOLO(args.model)
+    model = YOLO(f"ckpt/{args.model}")
 
     # Train model
     model.train(
