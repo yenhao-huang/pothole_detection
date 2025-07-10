@@ -1,4 +1,6 @@
 import argparse
+import shutil
+import os 
 from ultralytics import YOLO
 
 def main():
@@ -9,9 +11,18 @@ def main():
     parser.add_argument('--imgsz', type=int, default=640, help='Image size')
     args = parser.parse_args()
 
-    # Load model
-    model = YOLO(f"ckpt/{args.model}")
+    model_path_ckpt = f"ckpt/{args.model}.pt"
+    model_path_local = f"./{args.model}.pt"
+    if os.path.exists(model_path_ckpt):
+        model = YOLO(model_path_ckpt)
+    else:
+        # Pull model (YOLO will download if not exists)
+        model = YOLO(f"{args.model}.pt")
 
+        # Move it to ckpt/
+        if os.path.exists(model_path_local):
+            shutil.move(model_path_local, model_path_ckpt)
+    
     # Train model
     model.train(
         data='data/pothole_data/data.yaml', 

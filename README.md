@@ -1,11 +1,7 @@
 # Pothole Detection
 
-This project uses **Ultralytics YOLOv8** for pothole detection in images. It can be applied to road inspection, intelligent transportation systems, and related fields.
+This project uses **Ultralytics YOLO** for pothole detection in images. It can be applied to road inspection, intelligent transportation systems, and related fields.
 
-TODO
-- [ ] Change Models: yolov8 v.s. yolov11
-- [ ] Change Optimizer ADAM
-- [ ] Summary Challenges
 ---
 
 ## How to Run
@@ -35,22 +31,29 @@ python script/evaluate.py
 
 ## Data
 
-* **Format conversion**: Converted from PASCAL VOC format to COCO format to match YOLOv8 requirements.
+Dataset
+* Training images: 532
+* Validation images: 133
+
+Preparation
+* **Format conversion**: Converted from PASCAL VOC format to COCO format to match YOLOv11 requirements.
 * **Dataset split**: Divided into train / val sets.
-* **YOLOv8 requirements**: A `data.yaml` file is required to specify the dataset locations.
+* **YOLOv11 requirements**: A `data.yaml` file is required to specify the dataset locations.
 
 ---
 
 ## Model Overview
 
-| Item              | Value                             |
-| ----------------- | --------------------------------- |
-| **#Parameters**   | \~3.2M                |
-| **Optimizer**     | SGD      |
-| **Learning Rate** | 0.01 |
-| **Loss Function** | CIoU Loss + CLs Loss + DFL Loss        |
-| **Batch Size**    | 16  |
-| **Epochs**        | 100      |
+| Item                  | YOLOv8           | YOLOv11x         | YOLOv11n         |
+| --------------------- | ---------------- | ---------------- | ---------------- |
+| **#Parameters**       | \~3.2M           | \~56.9M          | \~7.7M           |
+| **Forward Pass Size** | \~1.6GB          | \~16GB           | \~2.2GB          |
+| **Optimizer**         | SGD              | AdamW            | AdamW            |
+| **Learning Rate**     | 0.01             | 0.01             | 0.01             |
+| **Loss Function**     | CIoU + Cls + DFL | CIoU + Cls + DFL | CIoU + Cls + DFL |
+| **Batch Size**        | 16               | 16               | 16               |
+| **Epochs**            | 100              | 100              | 100              |
+
 
 ### Loss Function
                                                             
@@ -66,26 +69,24 @@ python script/evaluate.py
 ## Results
 
 ### Performance
-| Metric        | YOLOv8  | YOLOv11 |
-| ------------- | ------- | ------- |
-| Precision (B) | 0.85399 | 0.81587 |
-| Recall (B)    | 0.70845 | 0.73650 |
-| mAP50 (B)     | 0.81022 | 0.82713 |
-| mAP50-95 (B)  | 0.55191 | 0.55596 |
-
-### Speed (ms per image)
-| Stage       | Time (ms) |
-| ----------- | --------- |
-| Preprocess  | 0.60      |
-| Inference   | 5.19      |
-| Loss        | 0.00026   |
-| Postprocess | 0.79      |
-
-## Challenges
+| Metric        | YOLOv8  | YOLOv11x | YOLOv11n |
+| ------------- | ------- | -------- | -------- |
+| Precision (B) | 0.85399 | 0.81587  | 0.82338  |
+| Recall (B)    | 0.70845 | 0.73650  | 0.64850  |
+| mAP50 (B)     | 0.81022 | 0.82713  | 0.77412  |
+| mAP50-95 (B)  | 0.55191 | 0.55596  | 0.51945  |
 
 ---
 
-## 🔗 References
+## Challenges
+1. **Bigger model is not always better**
+   Despite having significantly more parameters, **YOLOv11x** did not outperform the smaller **YOLOv11n** on all metrics. In particular, YOLOv11n achieved higher **precision** and nearly comparable **mAP**, suggesting that lighter models may generalize better on small datasets.
 
-* [Ultralytics YOLOv8 Documentation](https://docs.ultralytics.com/)
-* [Kaggle Pothole Detection Dataset](https://www.kaggle.com/datasets/andrewmvd/pothole-detection)
+2. **Data format compatibility**
+   The original dataset was in **PASCAL VOC** format, which is incompatible with YOLOv11 out-of-the-box. It was necessary to convert the dataset to **COCO format** and ensure training.
+
+---
+## References
+
+Model architecture
+https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/models/11/yolo11.yaml
