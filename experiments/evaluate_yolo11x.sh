@@ -1,0 +1,1 @@
+python script/evaluate.py --model "pothole_yolo11x"
