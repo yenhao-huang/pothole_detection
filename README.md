@@ -36,15 +36,15 @@ Dataset
 * Validation images: 133
 
 Preparation
-* **Format conversion**: Converted from PASCAL VOC format to COCO format to match YOLOv11 requirements.
+* **Format conversion**: Converted from PASCAL VOC format to COCO format to match YOLO11n requirements.
 * **Dataset split**: Divided into train / val sets.
-* **YOLOv11 requirements**: A `data.yaml` file is required to specify the dataset locations.
+* **YOLO11n requirements**: A `data.yaml` file is required to specify the dataset locations.
 
 ---
 
 ## Model Overview
 
-| Item                  | YOLOv8           | YOLOv11x         | YOLOv11n         |
+| Item                  | YOLOv8           | YOLO11x         | YOLO11n         |
 | --------------------- | ---------------- | ---------------- | ---------------- |
 | **#Parameters**       | \~3.2M           | \~56.9M          | \~7.7M           |
 | **Forward Pass Size** | \~1.6GB          | \~16GB           | \~2.2GB          |
@@ -69,7 +69,7 @@ Preparation
 ## Results
 
 ### Performance
-| Metric        | YOLOv8  | YOLOv11x | YOLOv11n |
+| Metric        | YOLOv8  | YOLO11n | YOLO11x |
 | ------------- | ------- | -------- | -------- |
 | Precision (B) | 0.85399 | 0.81587  | 0.82338  |
 | Recall (B)    | 0.70845 | 0.73650  | 0.64850  |
@@ -80,10 +80,10 @@ Preparation
 
 ## Challenges
 1. **Bigger model is not always better**
-   Despite having significantly more parameters, **YOLOv11x** did not outperform the smaller **YOLOv11n** on all metrics. In particular, YOLOv11n achieved higher **precision** and nearly comparable **mAP**, suggesting that lighter models may generalize better on small datasets.
+   Despite having significantly more parameters, **YOLO11x** did not outperform the smaller **YOLO11** on all metrics. In particular, YOLO11n achieved higher **precision** and nearly comparable **mAP**, suggesting that lighter models may generalize better on small datasets.
 
 2. **Data format compatibility**
-   The original dataset was in **PASCAL VOC** format, which is incompatible with YOLOv11 out-of-the-box. It was necessary to convert the dataset to **COCO format** and ensure training.
+   The original dataset was in **PASCAL VOC** format, which is incompatible with YOLO11nout-of-the-box. It was necessary to convert the dataset to **COCO format** and ensure training.
 
 ---
 ## References
