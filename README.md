@@ -2,29 +2,103 @@
 
 This project uses **Ultralytics YOLO** for pothole detection in images. It can be applied to road inspection, intelligent transportation systems, and related fields.
 
----
 
 ## How to Run
 
-### 1. Install dependencies
+### Step 0: Activate the Environment
+
 ```bash
-pip install -r requirements.txt
+conda activate obj_detect
 ```
 
-### 2. Prepare data
-Convert the dataset to COCO format and split into train / val:
+---
+
+### Step 1: Install Dependencies
+
+```bash
+pip install -r requirements.txt
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+```
+
+---
+
+### Step 2: Download Dataset
+
+```bash
+python download_data.py
+```
+
+---
+
+### Step 3: Preprocess Dataset
+
+Convert the dataset to COCO format and split it into training and validation sets:
+
 ```bash
 python utils/split_raw_data.py
 ```
 
-### 3. Train the model
+---
+
+### Step 4: Train the Model
+
 ```bash
 python script/finetune.py
 ```
 
-### 4. Evaluate the model
+---
+
+### Step 5: Evaluate the Model
+
 ```bash
 python script/evaluate.py
+```
+
+---
+
+### Step 6: Launch the Web API
+
+```bash
+bash script/prep_frontend.sh
+uvicorn app.main:app --reload
+```
+
+This will start the FastAPI server at:
+
+```
+http://127.0.0.1:8000
+```
+
+* Web UI: `http://127.0.0.1:8000/`
+* API Docs: `http://127.0.0.1:8000/docs`
+
+Here is a sample output:
+
+![Results](metadata/image.png)
+
+---
+
+## Project Structure
+
+```
+.
+├── app/
+│   ├── main.py
+│   ├── predict_obj.py
+│   └── static/
+│       ├── index.html
+│       ├── uploads/
+│       └── results/
+├── script/
+│   ├── download_data.py
+│   ├── finetune.py
+│   └── evaluate.py
+├── utils/
+│   └── split_raw_data.py
+├── ckpt/
+│   └── (YOLO checkpoint files)
+├── requirements.txt
+└── README.md
 ```
 
 ---
@@ -63,6 +137,31 @@ Preparation
 | **Cls Loss** | Binary Cross-Entropy (BCE) loss — evaluates class prediction accuracy                              |
 | **CIoU Loss** | IoU-based loss (e.g., CIoU or SIoU) — measures overlap quality between predicted and ground-truth boxes |
 
+
+---
+
+## Web API：FastAPI
+
+This project uses FastAPI as a high-performance backend framework to handle image uploads and object detection. It supports asynchronous I/O, automatic API documentation, input validation, and static file serving for the frontend interface.
+
+### Current API Endpoints
+
+| Route       | Method | Description                     |
+|-------------|--------|---------------------------------|
+| `/`         | GET    | Serves the HTML upload frontend |
+| `/predict`  | POST   | Accepts an image and returns the prediction result path |
+
+### System Overview
+
+- Accepts image uploads via `UploadFile` and saves them locally
+- Uses a YOLO model to perform object detection
+- Saves annotated result images to `static/results/`
+- Returns image paths as JSON for rendering on the frontend
+
+### How to Test the API
+
+- Use Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
+- Or test with Postman / curl using the `/predict` endpoint
 
 ---
 

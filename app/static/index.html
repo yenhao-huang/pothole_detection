@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Detection Uploader</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <!-- Main container for the upload form -->
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-lg">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Upload an Image for Detection</h1>
+
+        <!-- File upload form -->
+        <form id="uploadForm" class="space-y-6">
+
+            <!-- File input section -->
+            <div
+                class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors duration-200">
+                <input type="file" id="fileInput" name="image" class="hidden" required>
+                <label for="fileInput" class="cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M4 14.899A5 5 0 0 1 13.018 7.306a7 7 0 0 0 6.967 1.764a5 5 0 0 1 1.956 9.83" />
+                        <path d="M12 16v-8" />
+                        <path d="M15 13l-3-3l-3 3" />
+                    </svg>
+                    <p class="mt-2 text-sm text-gray-600 font-medium">
+                        <span class="text-blue-600 hover:underline">Choose a file</span> or drag it here
+                    </p>
+                    <p id="fileName" class="text-xs text-gray-500 mt-1 truncate">No file selected</p>
+                </label>
+            </div>
+
+            <!-- Upload button -->
+            <button type="submit" id="uploadButton"
+                class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-400"
+                disabled>
+                Upload
+            </button>
+        </form>
+
+        <!-- Status and Result display section -->
+        <div id="statusContainer" class="mt-6 hidden">
+            <div id="loadingIndicator" class="hidden text-center text-gray-600">
+                <p>Uploading... Please wait.</p>
+                <div class="mt-2 w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div class="animate-pulse bg-blue-500 h-full w-full"></div>
+                </div>
+            </div>
+
+            <!-- Display the results from the backend -->
+            <div id="resultDisplay" class="hidden mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                <h3 class="font-semibold text-lg text-gray-800">Prediction Results</h3>
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="text-center">
+                        <h4 class="text-sm font-medium text-gray-500">Input Image</h4>
+                        <img id="inputImage" src="" alt="Input Image"
+                            class="mt-2 w-full h-auto rounded-lg shadow-md max-h-48 object-contain mx-auto" />
+                        <p id="inputPath" class="mt-2 text-xs text-gray-400 truncate"></p>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="text-sm font-medium text-gray-500">Result Image</h4>
+                        <img id="resultImage" src="" alt="Result Image"
+                            class="mt-2 w-full h-auto rounded-lg shadow-md max-h-48 object-contain mx-auto" />
+                        <p id="resultPath" class="mt-2 text-xs text-gray-400 truncate"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get references to DOM elements
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const fileNameSpan = document.getElementById('fileName');
+        const uploadButton = document.getElementById('uploadButton');
+        const statusContainer = document.getElementById('statusContainer');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const resultDisplay = document.getElementById('resultDisplay');
+        const inputImage = document.getElementById('inputImage');
+        const resultImage = document.getElementById('resultImage');
+        const inputPath = document.getElementById('inputPath');
+        const resultPath = document.getElementById('resultPath');
+
+        // Update the file name and enable the upload button when a file is selected
+        fileInput.addEventListener('change', (event) => {
+            if (event.target.files.length > 0) {
+                fileNameSpan.textContent = event.target.files[0].name;
+                uploadButton.disabled = false;
+            } else {
+                fileNameSpan.textContent = "No file selected";
+                uploadButton.disabled = true;
+            }
+        });
+
+        // Handle the form submission
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Show the loading indicator and hide previous results
+            statusContainer.classList.remove('hidden');
+            loadingIndicator.classList.remove('hidden');
+            resultDisplay.classList.add('hidden');
+            uploadButton.disabled = true; // Disable button during upload
+            uploadButton.textContent = 'Uploading...';
+
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('image', file); // 'image' is the key expected by your FastAPI endpoint
+
+            try {
+                // Send the POST request to the FastAPI endpoint
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Success:', data);
+
+                // Construct and display the result
+                loadingIndicator.classList.add('hidden');
+                resultDisplay.classList.remove('hidden');
+
+                const inputUrl = data.input;
+                const resultUrl = data.result;
+
+                // Use a placeholder image as a fallback in case the path is incorrect
+                const placeholderUrl = "https://placehold.co/200x200/e2e8f0/808080?text=Image+not+found";
+
+                inputImage.src = inputUrl;
+                inputImage.onerror = () => inputImage.src = placeholderUrl;
+                resultImage.src = resultUrl;
+                resultImage.onerror = () => resultImage.src = placeholderUrl;
+
+                inputPath.textContent = `Path: ${data.input}`;
+                resultPath.textContent = `Path: ${data.result}`;
+
+            } catch (error) {
+                console.error('Error:', error);
+                loadingIndicator.classList.add('hidden');
+                // Display a user-friendly error message
+                resultDisplay.classList.remove('hidden');
+                resultDisplay.innerHTML = `<div class="text-red-500 font-medium">An error occurred: ${error.message}. <br/> Please check your backend logs and CORS settings.</div>`;
+            } finally {
+                // Re-enable the button after the request is complete
+                uploadButton.disabled = false;
+                uploadButton.textContent = 'Upload';
+            }
+        });
+
+    </script>
+</body>
+
+</html>

@@ -7,7 +7,7 @@ def main():
     # Argument parser
     parser = argparse.ArgumentParser(description="Train YOLOv8 model on pothole dataset.")
     parser.add_argument('--model', type=str, default="yolov8n", help='Path to YOLO model file (e.g., yolov8n.pt)')
-    parser.add_argument('--epochs', type=int, default=1, help='Number of training epochs')
+    parser.add_argument('--epochs', type=int, default=100, help='Number of training epochs')
     parser.add_argument('--imgsz', type=int, default=640, help='Image size')
     args = parser.parse_args()
 

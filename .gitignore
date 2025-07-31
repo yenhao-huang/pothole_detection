@@ -4,3 +4,7 @@ data
 ckpt
 hpo_trials
 yolo11n.pt
+ckpt/*
+app/__pycache__
+app/static/uploads/*
+app/static/results/*

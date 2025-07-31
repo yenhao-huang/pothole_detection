@@ -5,8 +5,8 @@ import xml.etree.ElementTree as ET
 from PIL import Image
 
 # CONFIG
-SRC_IMG_DIR = "data/raw_data/images"
-SRC_XML_DIR = "data/raw_data/annotations"
+SRC_IMG_DIR = "data/images"
+SRC_XML_DIR = "data/annotations"
 DST_BASE = "data/pothole_data"
 TRAIN_RATIO = 0.8
 CLASS_MAPPING = {'pothole': 0}  # Modify if you have multiple classes
