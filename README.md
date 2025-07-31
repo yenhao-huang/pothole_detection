@@ -1,6 +1,6 @@
 # Pothole Detection
 
-This project uses **Ultralytics YOLO** for pothole detection in images. It can be applied to road inspection, intelligent transportation systems, and related fields.
+This project uses Ultralytics YOLO for pothole detection in images. It provides a web API built with FastAPI for uploading images and retrieving detection results. The system can be applied to road inspection, intelligent transportation systems, and related fields.
 
 
 ## How to Run
@@ -74,7 +74,7 @@ http://127.0.0.1:8000
 
 Here is a sample output:
 
-![Results](metadata/image.png)
+<img src="metadata/image.png" alt="Results" width="50%">
 
 ---
 
