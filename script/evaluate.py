@@ -4,7 +4,7 @@ from ultralytics import YOLO
 def main():
     # Argument parser
     parser = argparse.ArgumentParser(description="Run prediction and evaluation on pothole dataset using YOLOv8.")
-    parser.add_argument('--model', type=str, default="pothole_yolo8", help='Model file name (e.g., yolov8n.pt or path to best.pt)')
+    parser.add_argument('--model', type=str, default="pothole_yolov8n3", help='Model file name (e.g., yolov8n.pt or path to best.pt)')
     args = parser.parse_args()
 
     # Load model
@@ -21,7 +21,7 @@ def main():
 
     # Evaluate
     metrics = model.val()
-    print(f"Metrics: {metrics}")
+    ##print(f"Metrics: {metrics}")
 
 if __name__ == "__main__":
     main()

@@ -175,6 +175,13 @@ This project uses FastAPI as a high-performance backend framework to handle imag
 | mAP50 (B)     | 0.81022 | 0.82713  | 0.77412  |
 | mAP50-95 (B)  | 0.55191 | 0.55596  | 0.51945  |
 
+### Inference Time
+
+|               | Preprocess | Inference | Loss    | Postprocess |
+| ------------- | ---------- | --------- | ------- | ----------- |
+| **Time (ms)** | 1.568      | 7.820     | 0.00069 | 0.725       |
+
+
 ---
 
 ## Challenges
